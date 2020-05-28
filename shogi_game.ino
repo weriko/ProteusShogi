@@ -8,18 +8,18 @@
 
 //variables
 SoftwareSerial mySerial(2,3);  //define other inputs/outputs 
-LiquidCrystal lcd_blue (53,51,49,47,45,43);
-LiquidCrystal lcd_red (35,33,31,29,27,25);
+LiquidCrystal lcd_blue (53,51,49,47,45,43); //define lcd pins
+LiquidCrystal lcd_red (35,33,31,29,27,25); //define lcd pins
 
 String pieces_list = "KGRSCBLPDAOOOOOO";  // pieces and transformations 
 int positions_column[] = {14,41,68,95,122,149,176,203,230}; //column separation in pixeles 
 int positions_row[]={15,45,80,115,150,185,220,255,299};  //row separation in pixeles 
-size_t pieces_color[]={ILI9341_RED,ILI9341_BLACK};   
+size_t pieces_color[]={ILI9341_RED,ILI9341_BLACK};  // pieces colors 
 String mover = "";
 String pieces;
 String lcd_pieces_row1 ="";
 String lcd_pieces_row2 ="";
-Adafruit_ILI9341 tft = Adafruit_ILI9341(8,9,11,13, 10, 12);  // display configuration 
+Adafruit_ILI9341 tft = Adafruit_ILI9341(8,9,11,13, 10, 12);  // display configuration
 
 void setup() {
   Serial.begin(9600);
@@ -28,11 +28,11 @@ void setup() {
   lcd_red.begin(16,2);
   mySerial.println("SHOGI GAME");  
   tft.begin();
-  pinMode(2,INPUT);
-  pinMode(3,OUTPUT);
-  pinMode(7,OUTPUT);
-  pinMode(4,OUTPUT);
-  pinMode(12,OUTPUT);
+  pinMode(2,INPUT);  //RX pin for terminal
+  pinMode(3,OUTPUT); //TX pin for terminal
+  pinMode(7,OUTPUT); //blue led pin 
+  pinMode(4,OUTPUT); //red led pin
+  pinMode(12,OUTPUT); //speaker pin 
   uint8_t x = tft.readcommand8(ILI9341_RDMODE);
   mySerial.print("Display Power Mode: 0x"); mySerial.println(x, HEX);
   x = tft.readcommand8(ILI9341_RDMADCTL);
@@ -248,8 +248,8 @@ unsigned long kings(){  //default kings
   tft.println("K");
 }
 
-unsigned change_led(int player_color){ //led on 
-  if (player_color == 0){
+unsigned change_led(int player_color){ //led on or off
+  if (player_color == 0){ //define the player
       mySerial.println("1");
       digitalWrite(7,HIGH);
       digitalWrite(4,LOW);
@@ -282,7 +282,7 @@ unsigned put_piece(int put_x,int put_y,int put_piece, int player_color){  //put 
   return micros() - start;
 }
 unsigned lcd_print(String row1, String row2, int p){
-  if( p == 1){
+  if( p == 1){ //define lcds 
     lcd_blue.setCursor(0,0);
     lcd_blue.println(row1);
     lcd_blue.setCursor(0,1);
